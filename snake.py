@@ -1,6 +1,15 @@
+import time
+
 import curses
 H = 20
 W = 10
+x = 0
+y = 0
+m = [[' ' for x in range(H)] for y in range(W)] 
+m[0][0] = '■'
+up = False
+down = False
+
 def curses_init():
     stdscr = curses.initscr()
     curses.noecho()
@@ -8,48 +17,71 @@ def curses_init():
     stdscr.keypad(True)
     return stdscr
 
-def r():
+def r(): # refreshh all matrix. Shit but works
     for yy in range(W):
         for xx in range(H):
             window.addch(yy,xx,m[yy][xx])
         #time.sleep(0.1)
         window.refresh()
 
-def change_y(d):
+def move_up():
     global x
     global y
-    y += d
-    m[y-d][x] = '░'
+    y -= 1
+    m[y+1][x] = ' '
     m[y][x] = '■'
 
-def change_x(d):
+def move_down():
     global x
     global y
-    x += d
-    m[y][x-d] = '░'
-    m[y][x] = '■'   
+    y += 1
+    m[y-1][x] = ' '
+    m[y][x] = '■'
 
-x = 0
-y = 0
-m = [['░' for x in range(H)] for y in range(W)] 
-m[0][0] = '■'
+def move_right():
+    global x
+    global y
+    x += 1
+    m[y][x-1] = ' '
+    m[y][x] = '■'
+
+def move_left():
+    global x
+    global y
+    x -= 1
+    m[y][x+1] = ' '
+    m[y][x] = '■'
 
 
- 
 
-
-        
 window = curses_init()
+
+c = window.getch()
+if c == curses.KEY_DOWN:
+    move = move_down
+elif c == curses.KEY_UP:
+    move = move_up
+elif c == curses.KEY_RIGHT:
+    move = move_right
+elif c == curses.KEY_LEFT:
+    move = move_left
+
+window.nodelay(True)
+
 while True:
+    move()
     r()
     c = window.getch()
     if c == curses.KEY_DOWN:
-        change_y(1)
+        move = move_down
     elif c == curses.KEY_UP:
-        change_y(-1)
+        move = move_up
     elif c == curses.KEY_RIGHT:
-        change_x(1)
+        move = move_right
     elif c == curses.KEY_LEFT:
-        change_x(-1)        
-    elif c == ord('q'):
+        move = move_left
+    time.sleep(0.2)
+    
+    if c == ord('q'):
+        window.nodelay(False)
         break  # Exit the while loop
