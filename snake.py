@@ -76,4 +76,5 @@ while True:
     
     if c == ord('q'):
         window.nodelay(False)
+        curses.curs_set(1)
         break  # Exit the while loop
