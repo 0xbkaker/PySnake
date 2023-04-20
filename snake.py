@@ -15,9 +15,11 @@ def curses_init():
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
+    curses.curs_set(0)
     return stdscr
 
-def r(): # refreshh all matrix. Shit but works
+def r():
+    window.erase() # refreshh all matrix. Shit but works
     for yy in range(W):
         for xx in range(H):
             window.addch(yy,xx,m[yy][xx])
@@ -28,29 +30,31 @@ def move_up():
     global x
     global y
     y -= 1
-    m[y+1][x] = ' '
-    m[y][x] = '■'
+    window.delch(y+1,x)
+    window.addch(y,x,'■')
 
 def move_down():
     global x
     global y
     y += 1
-    m[y-1][x] = ' '
-    m[y][x] = '■'
+    window.delch(y-1,x)
+    window.addch(y,x,'■')
+
 
 def move_right():
     global x
     global y
     x += 1
-    m[y][x-1] = ' '
-    m[y][x] = '■'
+    window.delch(y,x-1)
+    window.addch(y,x,'■')
 
 def move_left():
     global x
     global y
     x -= 1
-    m[y][x+1] = ' '
-    m[y][x] = '■'
+    window.delch(y,x+1)
+    window.addch(y,x,'■')
+
 
 
 
@@ -70,7 +74,7 @@ window.nodelay(True)
 
 while True:
     move()
-    r()
+    #r()
     c = window.getch()
     if c == curses.KEY_DOWN:
         move = move_down
@@ -80,7 +84,7 @@ while True:
         move = move_right
     elif c == curses.KEY_LEFT:
         move = move_left
-    time.sleep(0.2)
+    time.sleep(0.1)
     
     if c == ord('q'):
         window.nodelay(False)
