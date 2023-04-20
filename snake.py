@@ -1,9 +1,11 @@
 import time
 
 import curses
-x = 0
-y = 0
+x = 7
+y = 4
 
+class Snake:
+    snake_xy = []
 
 def curses_init():
     stdscr = curses.initscr()
@@ -18,14 +20,14 @@ def move_up():
     global y
     y -= 1
     window.delch(y+1,x)
-    window.addch(y,x,'■')
+    window.addch(y,x,'O')
 
 def move_down():
     global x
     global y
     y += 1
     window.delch(y-1,x)
-    window.addch(y,x,'■')
+    window.addch(y,x,'O')
 
 
 def move_right():
@@ -33,14 +35,14 @@ def move_right():
     global y
     x += 1
     window.delch(y,x-1)
-    window.addch(y,x,'■')
+    window.addch(y,x,'O')
 
 def move_left():
     global x
     global y
     x -= 1
     window.delch(y,x+1)
-    window.addch(y,x,'■')
+    window.addch(y,x,'O')
 
 
 
@@ -70,7 +72,7 @@ while True:
         move = move_right
     elif c == curses.KEY_LEFT:
         move = move_left
-    time.sleep(0.1)
+    time.sleep(0.05)
     
     if c == ord('q'):
         window.nodelay(False)
