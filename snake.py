@@ -1,14 +1,9 @@
 import time
 
 import curses
-H = 20
-W = 10
 x = 0
 y = 0
-m = [[' ' for x in range(H)] for y in range(W)] 
-m[0][0] = '■'
-up = False
-down = False
+
 
 def curses_init():
     stdscr = curses.initscr()
@@ -17,14 +12,6 @@ def curses_init():
     stdscr.keypad(True)
     curses.curs_set(0)
     return stdscr
-
-def r():
-    window.erase() # refreshh all matrix. Shit but works
-    for yy in range(W):
-        for xx in range(H):
-            window.addch(yy,xx,m[yy][xx])
-        #time.sleep(0.1)
-        window.refresh()
 
 def move_up():
     global x
@@ -74,7 +61,6 @@ window.nodelay(True)
 
 while True:
     move()
-    #r()
     c = window.getch()
     if c == curses.KEY_DOWN:
         move = move_down
